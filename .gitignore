@@ -1,5 +1,7 @@
 input/*
 all/*
+winners/*
+tulog/*
 !.gitkeep
 
 **__pycache__**

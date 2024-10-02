@@ -9,6 +9,16 @@ class Entry:
         self.__status = None
         self.__limit = limit
         self.__set_status()
+        self.__iswinner = False
+        self.__isdraw = False
+    
+    @property
+    def iswinner(self):
+        return self.__iswinner
+    
+    @property
+    def isdraw(self):
+        return self.__isdraw
     
     @property
     def original(self):
@@ -16,7 +26,7 @@ class Entry:
     
     @property
     def sorted_key(self):
-        return tuple(sorted(self.entry_set))
+        return tuple(sorted(self.clean_entry[:3]))
     
     @property
     def owner(self):
@@ -60,26 +70,21 @@ class Entry:
             return self.clean_entry[-1]
         return 0
     
-    @property
-    def entry_set(self):
-        my_set = set()
-        for entry in self.clean_entry[:3]:
-            my_set.add(entry)
-        return frozenset(my_set)
 
     def __duplicated_entry(self):
-        return len(self.entry_set) != 3
+        return len(self.sorted_key) != 3
     
     def __wrong_bet(self):
         return self.original_bet % 5 != 0
     
     def __highest_combination_today(self):
         weekday = datetime.today().weekday()
-        highest_per_weekday = [45,45,45,45,45,45,45]
+        highest_per_weekday = [45,49,45,49,45,42,49]
         return highest_per_weekday[weekday]
+
     
     def __exceeded_highest_possible(self):
-        for entry in self.entry_set:
+        for entry in self.sorted_key:
             if entry > self.__highest_combination_today():
                 return True
         return False
@@ -87,8 +92,20 @@ class Entry:
     def __set_status(self):
         self.__status = not (self.__duplicated_entry() or self.__wrong_bet() or self.__exceeded_highest_possible())
     
+    def set_winner(self, winning_numbers=None):
+        if not self.ignore:
+            guesses = 0
+            if winning_numbers:
+                for number in self.sorted_key:
+                    if number in winning_numbers:
+                        guesses +=1
+            if guesses >= 3:
+                self.__iswinner = True
+            elif guesses == 2:
+                self.__isdraw = True
+    
     def __eq__(self, value: object) -> bool:
-        if self.entry_set == value.entry_set:
+        if self.sorted_key == value.sorted_key:
             return True
         return False
     
