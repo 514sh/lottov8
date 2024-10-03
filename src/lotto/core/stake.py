@@ -138,6 +138,7 @@ class Stake:
     
     @property
     def prepare_draw(self):
+        
         prepared = []
         prepared_dict = self.draw_dict
         header = f"{self.owner.upper()},C1,C2,C3,BET,BET W/ LIMIT,,,"
@@ -150,5 +151,9 @@ class Stake:
             line = f",{','.join([str(combination) for combination in entry])},{prepared_dict[entry]},{self.get_bet(prepared_dict[entry])},,,"
             prepared.append(line)
         second_line = f"TOTAL BET,,,,{total_bet},{total_bet_w_limit},,,"
+        total_remit = (self.total_bet  * 0.55) - total_bet
+        total_remit_w_limit = (self.total_bet_w_limit * 0.55) - total_bet
+        remit_line = f"REMIT,,,,{total_remit},{total_remit_w_limit},,,"
         prepared.append(second_line)
+        prepared.append(remit_line)
         return prepared
