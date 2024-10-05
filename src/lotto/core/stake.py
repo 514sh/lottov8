@@ -5,7 +5,14 @@ class Stake:
         self.__stake = stake
         self.__owner = owner
         self.__limit = limit
-    
+        self.__game = None
+        if len(self.__stake) > 0:
+            self.__game = f"6/{self.__stake[0].game}"
+
+    @property
+    def game(self):
+        return self.__game
+
     @property
     def total_bet(self):
         return sum([entry.original_bet for entry in self.all if not entry.ignore])
@@ -84,20 +91,35 @@ class Stake:
     @property
     def prepare_all(self):
         prepared = []
-        header = f"{self.owner.upper()},C1,C2,C3,BET,BET W/ LIMIT,,,"
+        header = f"\n{self.owner.upper()},COMBINATION,BET,BET W/ LIMIT,,,"
         prepared.append(header)
-
-        for entry in self.all_dict:
-            line = f",{','.join([str(combination) for combination in entry])},{self.all_dict[entry]},{self.get_bet(self.all_dict[entry])},,,"
+        all_keys = list(self.all_dict.keys())
+        same_with_prev = False
+        for index in range(len(self.all_dict)):
+            entry = all_keys[index]
+            next_entry = None
+            line = ""
+            if same_with_prev:
+                line += "**"
+                same_with_prev = False
+            if index + 1 < len(self.all_dict):
+                next_entry = all_keys[index + 1]
+                same_entries = sum([1 for number in entry if number in next_entry])
+                if same_entries == 2 and line == "":
+                    line += "**"
+                    same_with_prev = True
+                else:
+                    same_with_prev = False
+            line += f",{'-'.join([str(combination) for combination in entry])},{self.all_dict[entry]},{self.get_bet(self.all_dict[entry])},,,"
             prepared.append(line)
-        second_line = f"TOTAL BET,,,,{self.total_bet},{self.total_bet_w_limit},,,"
+        second_line = f"TOTAL BET,,{self.total_bet},{self.total_bet_w_limit},,,"
         prepared.append(second_line)
         return prepared
     
     @property
     def prepare_tulog(self):
         prepared = []
-        header = f"OWNER,C1,C2,C3,BET,BET W/ LIMIT,,,"
+        header = f"OWNER,COMBINATION,BET,BET W/ LIMIT,,,"
         prepared.append(header)
         total_bet = 0
         total_bet_w_limit = 0
@@ -107,10 +129,10 @@ class Stake:
                 bet_w_limit = self.get_bet(bet)
                 total_bet += bet
                 total_bet_w_limit += bet_w_limit
-                line = f"{owner.upper()},{','.join([str(combination) for combination in entry])},{bet},{bet_w_limit},,,"
+                line = f"{owner.upper()},{'-'.join([str(combination) for combination in entry])},{bet},{bet_w_limit},,,"
                 prepared.append(line)
             prepared.append("")
-        second_line = f"TOTAL BET,,,,{total_bet},{total_bet_w_limit},,,"
+        second_line = f"TOTAL BET,,{total_bet},{total_bet_w_limit},,,"
         prepared.append(second_line)
         
         return prepared
@@ -123,16 +145,16 @@ class Stake:
     def prepare_winners(self):
         prepared = []
         prepared_dict = self.winners_dict
-        header = f"{self.owner.upper()},C1,C2,C3,BET,BET W/ LIMIT,,,"
+        header = f"{self.owner.upper()},COMBINATION,BET,BET W/ LIMIT,,,"
         prepared.append(header)
         total_bet = 0
         total_bet_w_limit = 0
         for entry in prepared_dict:
             total_bet += prepared_dict[entry]
             total_bet_w_limit += self.get_bet(prepared_dict[entry])
-            line = f",{','.join([str(combination) for combination in entry])},{prepared_dict[entry]},{self.get_bet(prepared_dict[entry])},,,"
+            line = f",{'-'.join([str(combination) for combination in entry])},{prepared_dict[entry]},{self.get_bet(prepared_dict[entry])},,,"
             prepared.append(line)
-        second_line = f"TOTAL BET,,,,{total_bet},{total_bet_w_limit},,,"
+        second_line = f"TOTAL BET,,{total_bet},{total_bet_w_limit},,,"
         prepared.append(second_line)
         return prepared
     
@@ -141,19 +163,19 @@ class Stake:
         
         prepared = []
         prepared_dict = self.draw_dict
-        header = f"{self.owner.upper()},C1,C2,C3,BET,BET W/ LIMIT,,,"
+        header = f"{self.owner.upper()},COMBINATION,BET,BET W/ LIMIT,,,"
         prepared.append(header)
         total_bet = 0
         total_bet_w_limit = 0
         for entry in prepared_dict:
             total_bet += prepared_dict[entry]
             total_bet_w_limit += self.get_bet(prepared_dict[entry])
-            line = f",{','.join([str(combination) for combination in entry])},{prepared_dict[entry]},{self.get_bet(prepared_dict[entry])},,,"
+            line = f",{'-'.join([str(combination) for combination in entry])},{prepared_dict[entry]},{self.get_bet(prepared_dict[entry])},,,"
             prepared.append(line)
-        second_line = f"TOTAL BET,,,,{total_bet},{total_bet_w_limit},,,"
+        second_line = f"TOTAL BET,,{total_bet},{total_bet_w_limit},,,"
         total_remit = (self.total_bet  * 0.55) - total_bet
         total_remit_w_limit = (self.total_bet_w_limit * 0.55) - total_bet
-        remit_line = f"REMIT,,,,{total_remit},{total_remit_w_limit},,,"
+        remit_line = f"REMIT,,{total_remit},{total_remit_w_limit},,,"
         prepared.append(second_line)
         prepared.append(remit_line)
         return prepared

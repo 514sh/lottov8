@@ -31,12 +31,19 @@ def prepare_input(owners=owners, all_lines=all_lines, all_stakes=all_stakes,):
         all_stakes.append(stake)
         all_lines.append(stake.prepare_all)
 
+def game():
+    global all_stakes
+    for stake in all_stakes:
+        if stake.game:
+            return stake.game
+    return None
+
 def general_report(all_lines, owners, grand_total_bet, grand_total_bet_w_limit, base_path=""):
     most_list = max([len(output) for output in all_lines])
     filename = f"{base_path}all/{today}report"
     with open(f'{filename}.csv', "w", encoding="utf-8") as file:
         writer = csv.writer(file)
-        writer.writerow([f"GENERAL REPORT: {today[:-1]}"])
+        writer.writerow([f"GENERAL REPORT: {today[:-1]} {game() if game() else ""}"])
         writer.writerow([f"GRAND TOTAL: {grand_total_bet}"])
         writer.writerow([f"GRAND TOTAL W/ LIMIT: {grand_total_bet_w_limit}"])
         for line_number in range(most_list):
@@ -57,7 +64,7 @@ def tulog_report(tulog_lines, limit, base_path=""):
     filename = f"{base_path}tulog/{today}tulog_report"
     with open(f'{filename}.csv', "w", encoding="utf-8") as file:
         writer = csv.writer(file)
-        writer.writerow([f"TULOG REPORT: {today[:-1]}"])
+        writer.writerow([f"TULOG REPORT: {today[:-1]} {game() if game() else ""}"])
         for lines in super_stake.prepare_tulog:
             writer.writerow(lines.split(","))
             
@@ -69,7 +76,7 @@ def winners_report(all_winners, all_draws,owners, base_path=""):
     filename = f"{base_path}winners/{today}winners_report"
     with open(f'{filename}.csv', "w", encoding="utf-8") as file:
         writer = csv.writer(file)
-        writer.writerow([f"WINNER AND DRAW ENTRIES REPORT: {today[:-1]}"])
+        writer.writerow([f"WINNER AND DRAW ENTRIES REPORT: {today[:-1]} {game() if game() else ""}"])
         for line_number in range(most_list_winners):
             row = []
             for index in range(len(owners)):
@@ -151,7 +158,7 @@ while True:
         for stake,owner in zip(all_stakes,owners):
             print(f"Wrong input report on {owner.upper()}")
             print(stake)
-            print("\n\n")
+            print()
         prepare_again = True
     to_stop = input("Do you want to generate other report?(y/n)")
     if not ("y" == to_stop.lower() or "yes" == to_stop.lower()):

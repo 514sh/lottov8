@@ -82,6 +82,9 @@ class Entry:
         highest_per_weekday = [45,49,45,49,45,42,49]
         return highest_per_weekday[weekday]
 
+    @property
+    def game(self):
+        return self.__highest_combination_today()
     
     def __exceeded_highest_possible(self):
         for entry in self.sorted_key:
