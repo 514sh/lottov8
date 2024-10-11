@@ -67,9 +67,10 @@ class Stake:
                 if key not in entries:
                     entries[key] = {}
                 if entry.owner not in entries[key]:
-                    entries[key][entry.owner] = 0
-                entries[key][entry.owner] += entry.original_bet
-        return {key: entries[key] for key in sorted(entries) if len(entries[key]) > 1}    
+                    entries[key][entry.owner] = []
+                entries[key][entry.owner].append(entry.original_bet)
+        return {key: entries[key] for key in sorted(entries) if sum(len(entries[key][owner]) for owner in entries[key]) > 1}
+
         
             
     def get_bet(self, value):
@@ -125,12 +126,12 @@ class Stake:
         total_bet_w_limit = 0
         for entry in self.tulog_dict:
             for owner in self.tulog_dict[entry]:
-                bet = self.tulog_dict[entry].get(owner)
-                bet_w_limit = self.get_bet(bet)
-                total_bet += bet
-                total_bet_w_limit += bet_w_limit
-                line = f"{owner.upper()},{'-'.join([str(combination) for combination in entry])},{bet},{bet_w_limit},,,"
-                prepared.append(line)
+                for bet in self.tulog_dict[entry][owner]:
+                    bet_w_limit = self.get_bet(bet)
+                    total_bet += bet
+                    total_bet_w_limit += bet_w_limit
+                    line = f"{owner.upper()},{'-'.join([str(combination) for combination in entry])},{bet},{bet_w_limit},,,"
+                    prepared.append(line)
             prepared.append("")
         second_line = f"TOTAL BET,,{total_bet},{total_bet_w_limit},,,"
         prepared.append(second_line)
