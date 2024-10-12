@@ -7,3 +7,4 @@ tulog/*
 **__pycache__**
 **.pytest**
 .venv
+.env
