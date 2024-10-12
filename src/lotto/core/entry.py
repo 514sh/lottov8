@@ -42,7 +42,7 @@ class Entry:
     
     @property
     def ignore(self):
-        return len(self.clean_entry) <= 1
+        return len(self.clean_entry) < 1
     
     @property
     def used_bet(self):
@@ -66,11 +66,15 @@ class Entry:
     
     @property
     def original_bet(self):
-        if not self.ignore:
-            return self.clean_entry[-1]
+        if not self.ignore and self.status:
+            return self.clean_entry[3]
         return 0
     
-
+    @property
+    def game(self):
+        return self.__highest_combination_today()
+    
+    
     def __duplicated_entry(self):
         return len(self.sorted_key) != 3
     
@@ -81,10 +85,9 @@ class Entry:
         weekday = datetime.today().weekday()
         highest_per_weekday = [45,49,45,49,45,42,49]
         return highest_per_weekday[weekday]
-
-    @property
-    def game(self):
-        return self.__highest_combination_today()
+    
+    def __wrong_length(self):
+        return len(self.clean_entry) != 4
     
     def __exceeded_highest_possible(self):
         for entry in self.sorted_key:
@@ -93,7 +96,12 @@ class Entry:
         return False
     
     def __set_status(self):
-        self.__status = not (self.__duplicated_entry() or self.__wrong_bet() or self.__exceeded_highest_possible())
+        self.__status = not (
+            self.__duplicated_entry() or 
+            self.__wrong_bet() or 
+            self.__exceeded_highest_possible() or
+            self.__wrong_length()
+        )
     
     def set_winner(self, winning_numbers=None):
         if not self.ignore:
