@@ -12,7 +12,12 @@ def test_i_can_split_a_str_line_to_numpy_array(valid_input):
     expected_output = np.array([1, 2, 3, 5])
     assert np.all(splitted_line == expected_output) == True
     
-# def test_i_can_validate_a_valid_line(valid_input):
-#     sample_draw = 42
-#     is_valid = validate_line(valid_input, sample_draw)
-#     assert is_valid == True
+def test_i_can_validate_a_valid_line(valid_input):
+    sample_draw = 42
+    is_valid = validate_line(valid_input, sample_draw)
+    assert is_valid == True
+    
+def test_i_can_validate_a_valid_line_separated_by_punctuation(another_valid_input):
+    sample_draw = 42
+    is_valid = validate_line(another_valid_input, sample_draw)
+    assert is_valid == True
