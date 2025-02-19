@@ -32,3 +32,8 @@ def test_i_can_validate_that_if_a_combination_exceeds_42_it_is_not_valid_in_a_6_
     wrong_input_wrong_combination_exceeds_entry_in_6_42_draw):
     is_valid = validate_line(wrong_input_wrong_combination_exceeds_entry_in_6_42_draw, sample_draw_6_42)
     assert is_valid == False
+    
+def test_i_can_validate_that_if_a_combination_exceeds_45_it_is_not_valid_in_a_6_45_game_draw(
+    wrong_input_wrong_combination_exceeds_entry_in_6_45_draw):
+    is_valid = validate_line(wrong_input_wrong_combination_exceeds_entry_in_6_45_draw, sample_draw_6_45)
+    assert is_valid == False
