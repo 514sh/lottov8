@@ -6,7 +6,7 @@ sample_draw_6_42 = 42
 sample_draw_6_45 = 45
 sample_draw_6_49 = 49
 
-def test_i_can_parse_output_from_input_file_to_numpy_array(input_from_file):
+def test_i_can_parse_output_from_input_file_to_list_of_str(input_from_file):
     input_lines = get_lines(input_from_file)
     expected_output = ["1 2 3 5", "1 2 4 5"]
     assert input_lines[0] == expected_output[0]
