@@ -23,3 +23,7 @@ def test_i_can_validate_a_valid_line(valid_input):
 def test_i_can_validate_a_valid_line_separated_by_punctuation(another_valid_input):
     is_valid = validate_line(another_valid_input, sample_draw_6_42)
     assert is_valid == True
+
+def test_i_can_validate_that_a_double_entry_is_not_a_valid_line(wrong_input_wrong_combination_double_entry):
+    is_valid = validate_line(wrong_input_wrong_combination_double_entry, sample_draw_6_42)
+    assert is_valid == False
