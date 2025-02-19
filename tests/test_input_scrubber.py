@@ -72,8 +72,8 @@ def test_i_can_separate_valid_lines_from_invalid_lines_given_only_valid_lines(sa
     assert len(valid_lines) == len(expected_output)
     
 def test_i_can_separate_valid_lines_from_invalid_lines_given_only_invalid_lines_in_a_6_42_game_draw(
-    sample_input_str_only_valid):
-    valid_lines = lines_separator(sample_input_str_only_valid, sample_draw_6_42)[1]
+    sample_input_str_only_wrong):
+    valid_lines = lines_separator(sample_input_str_only_wrong, sample_draw_6_42)[1]
     expected_output = {
         1: "1 2 3 4",
         2: "1 3 3 5",
