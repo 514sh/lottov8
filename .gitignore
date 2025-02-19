@@ -8,3 +8,5 @@ tulog/*
 **.pytest**
 .venv
 .env
+coverage/*
+.coverage
