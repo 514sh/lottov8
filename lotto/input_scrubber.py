@@ -14,6 +14,8 @@ def validate_line(line, game_draw):
     elif entry.size == 4:
         if len(set(entry[:-1])) != 3:
             return False
+        elif not (entry[-1] % 5 == 0):
+            return False
         return np.all(entry[:-1] <= game_draw)
     return False
 
@@ -32,6 +34,6 @@ def lines_separator(input_str, game_draw):
         is_valid = validate_line(line, game_draw)
         if is_valid:
             valid_lines[line_number] = split_line(line)
-        elif not is_valid and is_valid is not None:
+        elif is_valid is False:
             invalid_lines[line_number] = line
     return valid_lines, invalid_lines
