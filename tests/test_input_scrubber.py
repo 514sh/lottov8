@@ -61,12 +61,12 @@ def test_i_can_validate_that_if_a_line_contains_only_whitespaces_it_is_ignored(i
     is_valid = validate_line(ignored_line, sample_draw_6_42)
     assert is_valid == None
     
-# def test_i_can_separate_valid_lines_from_invalid_lines_given_only_valid_lines(sample_input_str_only_valid):
-#     valid_lines = lines_separator(sample_input_str_only_valid, sample_draw_6_42)[0]
-#     expected_output = {
-#         1: np.array([1,2,3,5]),
-#         2: np.array([1,2,4,5]),
-#     }
-#     assert np.all(valid_lines[1] == expected_output[1]) == True
-#     assert np.all(valid_lines[2] == expected_output[2]) == True
-    # assert len(valid_lines) == len(expected_output)
+def test_i_can_separate_valid_lines_from_invalid_lines_given_only_valid_lines(sample_input_str_only_valid):
+    valid_lines = lines_separator(sample_input_str_only_valid, sample_draw_6_42)[0]
+    expected_output = {
+        1: np.array([1,2,3,5]),
+        2: np.array([1,2,4,5]),
+    }
+    assert np.all(valid_lines[1] == expected_output[1]) == True
+    assert np.all(valid_lines[2] == expected_output[2]) == True
+    assert len(valid_lines) == len(expected_output)
