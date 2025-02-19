@@ -11,7 +11,7 @@ def validate_line(line, game_draw):
     if entry.size == 4:
         if len(set(entry[:-1])) != 3:
             return False
-        return True
+        return np.all(entry[:-1] <= game_draw)
     return False
 
     
