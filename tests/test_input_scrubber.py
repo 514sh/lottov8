@@ -27,3 +27,8 @@ def test_i_can_validate_a_valid_line_separated_by_punctuation(another_valid_inpu
 def test_i_can_validate_that_a_double_entry_is_not_a_valid_line(wrong_input_wrong_combination_double_entry):
     is_valid = validate_line(wrong_input_wrong_combination_double_entry, sample_draw_6_42)
     assert is_valid == False
+    
+def test_i_can_validate_that_if_a_combination_exceeds_42_it_is_not_valid_in_a_6_42_game_draw(
+    wrong_input_wrong_combination_exceeds_entry_in_6_42_draw):
+    is_valid = validate_line(wrong_input_wrong_combination_exceeds_entry_in_6_42_draw, sample_draw_6_42)
+    assert is_valid == False
