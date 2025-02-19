@@ -8,5 +8,6 @@ def test_i_can_parse_output_from_input_file_to_numpy_array(input_from_file):
     assert np.all(input_lines == expected_output) == True
     
 def test_i_can_validate_a_valid_line(valid_input):
-    is_valid = validate_line(valid_input)
+    sample_draw = "42"
+    is_valid = validate_line(valid_input, sample_draw)
     assert is_valid == True
