@@ -42,7 +42,7 @@ def wrong_input_more_than_valid():
 
 @pytest.fixture
 def ignored_line():
-    return " "
+    return " \n"
 
 
 @pytest.fixture

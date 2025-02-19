@@ -54,3 +54,7 @@ def test_i_can_validate_that_if_a_line_has_one_length_it_is_invalid(wrong_input_
 def test_i_can_validate_that_if_a_line_is_more_than_valid_length_it_is_invalid(wrong_input_more_than_valid):
     is_valid = validate_line(wrong_input_more_than_valid, sample_draw_6_42)
     assert is_valid == False
+    
+def test_i_can_validate_that_if_a_line_contains_only_whitespaces_it_is_ignored(ignored_line):
+    is_valid = validate_line(ignored_line, sample_draw_6_42)
+    assert is_valid == None
