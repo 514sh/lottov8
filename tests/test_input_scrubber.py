@@ -75,19 +75,24 @@ def test_i_can_separate_valid_lines_from_invalid_lines_given_only_valid_lines(sa
     assert np.all(valid_lines[2] == expected_output[2]) == True
     assert len(valid_lines) == len(expected_output)
     
-# def test_i_can_separate_valid_lines_from_invalid_lines_given_only_invalid_lines_in_a_6_42_game_draw(
-#     sample_input_str_only_wrong):
-#     print(sample_input_str_only_wrong)
-#     valid_lines = lines_separator(sample_input_str_only_wrong, sample_draw_6_42)[1]
-#     expected_output = {
-#         1: "1 2 3 4",
-#         2: "1 3 3 5",
-#         3: "1 2 43 10",
-#         4: "1 2 46 10",
-#         5: "1 2 50 10",
-#         6: "1 2 5",
-#         7: "10",
-#         8: "1 2 3 4 5"
-#     }
+def test_i_can_separate_valid_lines_from_invalid_lines_given_only_invalid_lines_in_a_6_42_game_draw(
+    sample_input_str_only_wrong):
+    print(sample_input_str_only_wrong)
+    invalid_lines = lines_separator(sample_input_str_only_wrong, sample_draw_6_42)[1]
+    print(lines_separator(sample_input_str_only_wrong, sample_draw_6_42)[0])
+    expected_output = {
+        1: "1 2 3 4",
+        2: "1 3 3 5",
+        3: "1 2 43 10",
+        4: "1 2 46 10",
+        5: "1 2 50 10",
+        6: "1 2 5",
+        7: "10",
+        8: "1 2 3 4 5"
+    }
+    print(invalid_lines)
     
-#     assert len(valid_lines) == len(expected_output)
+    assert len(invalid_lines) == len(expected_output)
+    for line_number, line in invalid_lines.items():
+        assert line_number in expected_output
+        assert expected_output[line_number] == line
