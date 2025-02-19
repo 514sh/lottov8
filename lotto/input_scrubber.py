@@ -8,7 +8,9 @@ def get_lines(input_str):
 
 def validate_line(line, game_draw):
     entry = split_line(line)
-    if entry.size == 4:
+    if entry.size == 0:
+        return None
+    elif entry.size == 4:
         if len(set(entry[:-1])) != 3:
             return False
         return np.all(entry[:-1] <= game_draw)
