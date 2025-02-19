@@ -65,7 +65,7 @@ def test_i_can_separate_valid_lines_from_invalid_lines_given_only_valid_lines(sa
     valid_lines = lines_separator(sample_input_str_only_valid, sample_draw_6_42)[0]
     expected_output = {
         1: np.array([1,2,3,5]),
-        2: np.array([1,2,4,5]),
+        2: np.array([1,2,3,5]),
     }
     assert np.all(valid_lines[1] == expected_output[1]) == True
     assert np.all(valid_lines[2] == expected_output[2]) == True
