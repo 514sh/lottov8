@@ -34,6 +34,6 @@ def lines_separator(input_str, game_draw):
         is_valid = validate_line(line, game_draw)
         if is_valid:
             valid_lines[line_number] = split_line(line)
-        elif is_valid is False:
+        elif is_valid is not None:
             invalid_lines[line_number] = line
     return valid_lines, invalid_lines
