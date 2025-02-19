@@ -70,3 +70,19 @@ def test_i_can_separate_valid_lines_from_invalid_lines_given_only_valid_lines(sa
     assert np.all(valid_lines[1] == expected_output[1]) == True
     assert np.all(valid_lines[2] == expected_output[2]) == True
     assert len(valid_lines) == len(expected_output)
+    
+def test_i_can_separate_valid_lines_from_invalid_lines_given_only_invalid_lines_in_a_6_42_game_draw(
+    sample_input_str_only_valid):
+    valid_lines = lines_separator(sample_input_str_only_valid, sample_draw_6_42)[1]
+    expected_output = {
+        1: "1 2 3 4",
+        2: "1 3 3 5",
+        3: "1 2 43 10",
+        4: "1 2 46 10",
+        5: "1 2 50 10",
+        6: "1 2 5",
+        7: "10",
+        8: "1 2 3 4 5"
+    }
+    
+    assert len(valid_lines) == len(expected_output)
