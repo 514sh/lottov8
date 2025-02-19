@@ -46,3 +46,7 @@ def test_i_can_validate_that_if_a_combination_exceeds_49_it_is_invalid_in_a_6_49
 def test_i_can_validate_that_if_a_line_is_less_than_valid_length_it_is_invalid(wrong_input_length_less_than_valid):
     is_valid = validate_line(wrong_input_length_less_than_valid, sample_draw_6_42)
     assert is_valid == False
+    
+def test_i_can_validate_that_if_a_line_has_one_length_it_is_invalid(wrong_input_length_only_one):
+    is_valid = validate_line(wrong_input_length_only_one, sample_draw_6_42)
+    assert is_valid == False
