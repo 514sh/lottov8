@@ -6,10 +6,11 @@ def get_lines(input_str):
     return np.array(input_str.split("\n"))
 
 
-
 def validate_line(line, game_draw):
     entry = split_line(line)
     if entry.size == 4:
+        if len(set(entry[:-1])) != 3:
+            return False
         return True
     return False
 
