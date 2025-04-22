@@ -20,6 +20,7 @@ class Command(Enum):
     WINNERS = 3
     WRONG_INPUT = 4
 
+
 def run(limit=10):
     clear_console()
     entries_tree = {}
@@ -34,7 +35,9 @@ def run(limit=10):
         entries = Entries(valid_entries)
         entries_tree[owner] = entries
         wrong_input_tree[owner] = wrong_input
+
         game_bets_tree[owner] = entries.limited_entries(limit).total_bet
+
         
 
     
@@ -54,7 +57,9 @@ def run(limit=10):
         if command == Command.LIMITED.value:
             all_entries = []
             for owner, entries in entries_tree.items():
+
                 all_entries.extend(entries.limited(limit=limit))
+
             file_writer.write_limited(all_entries)
         elif command == Command.TULOG.value:
             sorted_entries = []
@@ -72,11 +77,13 @@ def run(limit=10):
             output = {}
             for owner, entries in entries_tree.items():
                 draws, winners = entries.draws_and_winners_entries(winning_numbers)
+
                 draws_total_bet = draws.limited_entries(limit=limit).total_bet
                 winners_total_bet = winners.limited_entries(limit=limit).total_bet
                 
                 draws = draws.limited(limit=limit)
                 winners = winners.limited(limit=limit)
+
                 
                 output[owner] = {
                     "draws": draws,
