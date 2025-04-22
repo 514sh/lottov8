@@ -10,3 +10,8 @@ tulog/*
 .env
 coverage/*
 .coverage
+
+todo.md
+
+cov_html
+**.html**
