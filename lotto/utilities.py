@@ -3,7 +3,7 @@ import heapq
 from datetime import datetime
 from pathlib import Path
 import pandas as pd
-import csv
+import csv2pdf
 
 def sync_file_read(filename: str) -> str:
     with open(filename, encoding="utf-8") as file:
@@ -76,18 +76,27 @@ def combine_entries(list_of_sorted_entries):
     return list(heapq.merge(*list_of_sorted_entries))
 
 class FileWriter:
-    def __init__(self, base_dir:Path, game_date: datetime, game_bets):
+    def __init__(self, base_dir:Path, game_date: datetime, game_bets, header_font=None, body_font=None):
         self._base_dir = base_dir
         self._game_date = game_date
         self._game_bets = game_bets
         self._filename = ""
         self._body = ""
         self._title = ""
+        self._header_font = header_font
+        self._body_font = body_font
     
     def write(self):
         with open(self._filename, "w", encoding="utf-8") as file:
             file.write(f"{self._headers}\n{self._body}")
-    
+            
+        if self._filename[len(self._filename)-3:] == "csv":
+            pdf_filename = f"{self._filename[:-3]}pdf"
+            font = self._body_font if self._body_font else None
+            headerfont = self._header_font if self._header_font else None
+            csv2pdf.convert(self._filename, pdf_filename, align="L", font=font, headerfont=headerfont, headersize=14)
+            
+            
     @property
     def body(self):
         return self._body
@@ -118,7 +127,7 @@ class FileWriter:
         self._body = "\n".join(data)
         self._title = "TULOG REPORT"
     
-    def write_draws_winners(self, output):
+    def write_draws_winners(self, output, winning_numbers):
         draws_list = []
         winners_list = []
         draws_total_bet = []
@@ -140,9 +149,11 @@ class FileWriter:
         winners_total_bet_str = self._write_totals(category="WINNERS TOTAL BET: ", output=winners_total_bet)
         draws_total_bet_str = self._write_totals(category="DRAWS TOTAL BET: ", output=draws_total_bet)
         remit_total_str = "\n".join(remits)
+        result = "-".join([str(number).zfill(2) for number in winning_numbers])
+        
         # side effects
         self._filename = generate_absolute_filename(parent_dir=self._base_dir / "result", owner="result", date=self._game_date, filetype=".csv")
-        self._body = f"{remit_total_str}\n\nWINNERS LIST\n{winners_str}\n{winners_total_bet_str}\nDRAWS LIST\n{draws_str}\n{draws_total_bet_str}\n"
+        self._body = f"WINNING NUMBERS:\n{result}\n\n{remit_total_str}\n\nWINNERS LIST\n{winners_str}\n{winners_total_bet_str}\nDRAWS LIST\n{draws_str}\n{draws_total_bet_str}\n"
         self._title = "WINNERS AND DRAWS REPORT"
         
     @property    
@@ -150,7 +161,7 @@ class FileWriter:
         game_total_bet = 0
         metadata = [
             f"{self._title}",
-            f"LOTTO 6/{self.game_of_the_day}, {'-'.join(self.get_date)}"
+            f"LOTTO 6/{self.game_of_the_day}: {'-'.join(self.get_date)}",
             ""
         ]
         if self._title != "TULOG REPORT":
@@ -179,5 +190,6 @@ class FileWriter:
     def _write_totals(self, category, output):
         output_str = ",".join([str(out) for out in output])
         return f"{category}\n{output_str}\n"
+    
     
     
