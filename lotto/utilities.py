@@ -80,21 +80,25 @@ class FileWriter:
         self._base_dir = base_dir
         self._game_date = game_date
         self._game_bets = game_bets
-        self._filename = ""
+        self._file_parent = ""
         self._body = ""
         self._title = ""
         self._header_font = header_font
         self._body_font = body_font
     
     def write(self):
-        with open(self._filename, "w", encoding="utf-8") as file:
+        file_type = "txt"
+        if self._file_parent != "tulog":
+            file_type = "csv"
+        filename = generate_absolute_filename(parent_dir=self._base_dir / self._file_parent, owner=self._file_parent, date=self._game_date, filetype=file_type)
+        with open(filename, "w", encoding="utf-8") as file:
             file.write(f"{self._headers}\n{self._body}")
             
-        if self._filename[len(self._filename)-3:] == "csv":
-            pdf_filename = f"{self._filename[:-3]}pdf"
+        if self._file_parent != "tulog":
+            pdf_filename = generate_absolute_filename(parent_dir=self._base_dir / self._file_parent, owner=self._file_parent, date=self._game_date, filetype="pdf")
             font = self._body_font if self._body_font else None
             headerfont = self._header_font if self._header_font else None
-            csv2pdf.convert(self._filename, pdf_filename, align="L", font=font, headerfont=headerfont, headersize=14)
+            csv2pdf.convert(filename, pdf_filename, align="L", font=font, headerfont=headerfont, headersize=14)
             
             
     @property
@@ -111,7 +115,7 @@ class FileWriter:
     
     def write_limited(self, output):
         # side effects
-        self._filename = generate_absolute_filename(parent_dir=self._base_dir / "all", owner="all", date=self._game_date, filetype="csv")
+        self._file_parent = "all"
         self._body = self._write_table_style(output)
         self._title = "ALL ENTRIES REPORT"
 
@@ -122,8 +126,9 @@ class FileWriter:
                 line = "-".join(map(str,[*entry_obj.combination, entry_obj.bet, entry_obj.owner]))
                 data.append(line)
             data.append("")
+            
         # side effects    
-        self._filename = generate_absolute_filename(parent_dir=self._base_dir / "tulog", owner="tulog", date=self._game_date, filetype="txt")
+        self._file_parent = "tulog"
         self._body = "\n".join(data)
         self._title = "TULOG REPORT"
     
@@ -152,7 +157,7 @@ class FileWriter:
         result = "-".join([str(number).zfill(2) for number in winning_numbers])
         
         # side effects
-        self._filename = generate_absolute_filename(parent_dir=self._base_dir / "result", owner="result", date=self._game_date, filetype=".csv")
+        self._file_parent = "result"
         self._body = f"WINNING NUMBERS:\n{result}\n\n{remit_total_str}\n\nWINNERS LIST\n{winners_str}\n{winners_total_bet_str}\nDRAWS LIST\n{draws_str}\n{draws_total_bet_str}\n"
         self._title = "WINNERS AND DRAWS REPORT"
         
