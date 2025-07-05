@@ -37,19 +37,30 @@ def generate_absolute_filename(parent_dir: Path,owner: str, date: datetime, file
     filename = generate_filename(owner, date, filetype)
     return f"{parent_dir}/{filename}"
 
-def separator(entries: list, owner:str, game_date: datetime):
+def separator(entries: list, owner:str, game_date: datetime, kabos: list | None = None):
     wrong_input = {}
     valid_entries = []
-    for index, entry in enumerate(entries):
+    line_number_max = len(entries)
+    current_kabo = None
+    for index, entry in enumerate(entries[::-1]):
         split_entry = re.split("[^0-9]", entry)
         prepared_entry = [int(i) for i in split_entry if i != ""]
+        current_line_number = line_number_max - index
+        stripped_entry = entry.strip().lower()
+        for kabo_code in kabos:
+            if stripped_entry.startswith(kabo_code):
+                current_kabo = stripped_entry
+                break
+            
+        kabo = current_kabo if current_kabo else owner
+
         if len(prepared_entry) == 0:
             continue
         elif _is_valid_entry(prepared_entry, game_date):
-            valid_entry = (index+1, entry, owner)
+            valid_entry = (current_line_number, entry, owner, kabo)
             valid_entries.append(valid_entry)
         else:
-            wrong_input[index + 1] = entry
+            wrong_input[current_line_number] = entry
     return wrong_input, valid_entries
     
 def _is_valid_entry(prepared_entry: str, game_date: datetime):
@@ -123,7 +134,7 @@ class FileWriter:
         data = []
         for key in output:
             for entry_obj in output[key]:
-                line = "-".join(map(str,[*entry_obj.combination, entry_obj.bet, entry_obj.owner]))
+                line = "-".join(map(str,[*entry_obj.combination, entry_obj.bet, entry_obj.kabo]))
                 data.append(line)
             data.append("")
             

@@ -6,6 +6,7 @@ from datetime import datetime
 load_dotenv()
 
 OWNERS = os.environ.get("OWNERS").split(",")
+KABO = os.environ.get("KABO").split(",")
 base_dir_str = os.environ.get("BASE_DIR")
 project_dir = os.environ.get("PROJECT_DIR")
 

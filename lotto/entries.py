@@ -3,7 +3,7 @@ import re
 from typing import List
 
 class Entry:
-    def __init__(self, line_number: int, entry: str, owner: str):
+    def __init__(self, line_number: int, entry: str, owner: str, kabo: str | None = None):
         self._line_number = line_number
         self._raw_entry = entry
         self._owner = owner
@@ -11,6 +11,11 @@ class Entry:
         self._entry = [int(i) for i in split_entry if i != ""]
         self._combination = self._entry[:3]
         self._bet = self._entry[3]
+        self._kabo = kabo
+        
+    @property
+    def kabo(self):
+        return self._kabo
     
     @property
     def line_number(self):

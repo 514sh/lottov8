@@ -1,7 +1,7 @@
 from enum import Enum
 import sys
 
-from lotto.config import OWNERS, BASE_DIR, GAME_DATE, LIMIT, HEADER_FONT, BODY_FONT
+from lotto.config import OWNERS, BASE_DIR, GAME_DATE, LIMIT, HEADER_FONT, BODY_FONT, KABO
 
 from lotto.utilities import (
     sync_file_read, 
@@ -28,10 +28,11 @@ def run(
     game_date=GAME_DATE,
     header_font=HEADER_FONT,
     body_font=BODY_FONT,
+    kabos=KABO,
     ):
     
     clear_console()
-    entries_tree, wrong_input_tree, game_bets_tree = load_entries(base_dir, owners, game_date, limit)
+    entries_tree, wrong_input_tree, game_bets_tree = load_entries(base_dir, owners, game_date, limit, kabos)
     command = get_user_command()
     clear_console()
     handle_command(
@@ -84,7 +85,7 @@ def process_draws_and_winners_entries(file_writer, entries_tree, limit):
     file_writer.write_draws_winners(output, winning_numbers)
     cli_reporter(input_tree=winners_tree, title="WINNERS REPORT")    
         
-def load_entries(base_dir, owners, game_date, limit):
+def load_entries(base_dir, owners, game_date, limit, kabos):
     entries_tree = {}
     wrong_input_tree = {}
     game_bets_tree = {}
@@ -93,7 +94,7 @@ def load_entries(base_dir, owners, game_date, limit):
         filename = base_dir / "input"
         filename = generate_absolute_filename(parent_dir=filename, owner=owner, date=game_date)
         parsed_entries = parse_read_file(sync_file_read(filename))
-        wrong_input, valid_entries = separator(parsed_entries, owner, game_date)
+        wrong_input, valid_entries = separator(parsed_entries, owner, game_date, kabos)
         entries = Entries(valid_entries)
         entries_tree[owner] = entries
         wrong_input_tree[owner] = wrong_input
