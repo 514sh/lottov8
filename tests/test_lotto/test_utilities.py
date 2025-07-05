@@ -67,6 +67,7 @@ def test_separator():
         "10 20 30", # wrong length
         "10 20 30 30 30", # wrong length
         "10 10 20 30", # double entry
+        "test_kabo"
     ]
     expected_wrong_input = {
         3: "1 2 3 4",
@@ -74,9 +75,9 @@ def test_separator():
         5: "10 20 30 30 30",
         6: "10 10 20 30"
     }
-    wrong_input, valid_entries = separator(entries, owner="abc", game_date=datetime(2025, 4, 21))
+    wrong_input, valid_entries = separator(entries, owner="abc", game_date=datetime(2025, 4, 21), kabos=["test"])
     assert wrong_input == expected_wrong_input
-    assert valid_entries == [(1, "1 2 3 5", "abc")]
+    assert valid_entries == [(1, "1 2 3 5", "abc", "test_kabo")]
     
 def test_combiner(entries_01, entries_02):
     list_of_sorted_entries = [entries_01.sort(), entries_02.sort()]
@@ -95,7 +96,6 @@ def test_filewriter_get_tulog_entries(file_writer, entries_01):
     file_writer.write_tulog(tulog_entries)
     assert file_writer.body == "1-2-3-10-abc\n1-2-3-5-def\n"
     
-
 # def test_filewriter_get_draws_and_winners(file_writer, entries_01):
 #     file_writer = FileWriter(base_dir=DATA_DIR, owner="test", game_date=datetime(2025, 4, 22))
 #     winning_numbers = [1,2,3,10,20,30]

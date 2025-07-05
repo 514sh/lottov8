@@ -11,16 +11,16 @@ DATA_DIR = Path(__file__).resolve().parent.parent / "DATADIR"
 @pytest.fixture
 def entries_01() -> Entries:
     return Entries(entries=[
-        (1, "1 4 2 5", "abc"),
-        (2, "1 3 2 10", "abc"),
-        (1, "1 2 3 5", "def"),
+        (1, "1 4 2 5", "abc", "abc"),
+        (2, "1 3 2 10", "abc", "abc"),
+        (1, "1 2 3 5", "def", "def"),
     ])
     
 @pytest.fixture
 def entries_02():
     return Entries(entries=[
-        (1, "1 2 4 10", "xyz"),
-        (2, "15 1 2 10", "xyz")
+        (1, "1 2 4 10", "xyz", "xyz"),
+        (2, "15 1 2 10", "xyz", "xyz")
     ])
     
 @pytest.fixture
